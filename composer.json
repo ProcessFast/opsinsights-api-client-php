@@ -1,0 +1,27 @@
+{
+    "name": "opsinsights/api-client",
+    "description": "PHP API client starting point for Ops Insights API",
+    "type": "library",
+    "require": {
+        "guzzlehttp/guzzle": "^7.4",
+        "phpunit/phpunit": "^9.0"
+    },
+    "license": "GNU GPL",
+    "authors": [
+        {
+            "name": "ProcessFast",
+            "email": "sales@processfast.com"
+        }
+    ],
+    "minimum-stability": "alpha",
+    "autoload": {
+    "psr-4": {
+        "OpsInsights\\": "src/"
+    }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OpsInsights\\Tests\\": "tests/"
+        }
+    }
+}
