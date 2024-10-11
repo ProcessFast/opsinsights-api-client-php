@@ -5,7 +5,7 @@ use OpsInsights\Auth;
 use OpsInsights\Client;
 
 // Initialize the Auth class and authenticate
-$auth = new Auth('https://dev.opsinsights.com', 'TwDvl9NB1mxmV6QeviT9cxoBwigylxfp', '8wcPkPrEHl5_wxrJzJRuF6h7NHdFe4Hz');
+$auth = new Auth('https://app.opsinsights.com', 'your_key', 'your_secret');
 $auth->authenticate();
 
 // Initialize the Client class
