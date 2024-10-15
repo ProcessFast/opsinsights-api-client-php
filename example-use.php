@@ -8,7 +8,6 @@ $apiBaseUrl = "https://app.opsinsights.com";
 $client_key = 'your_key';
 $client_secret = 'your_secret';
 
-
 // Initialize the Auth class and authenticate
 $auth = new Auth($apiBaseUrl, $client_key, $client_secret);
 $auth->authenticate();
@@ -143,5 +142,14 @@ $client->printFileInfo($myFile);
 // echo "Settlement Info retrieved.\n" . PHP_EOL;
 // echo "Printing info about the Settlement for this file: \n" . PHP_EOL;
 // $client->printSettlementInfo($mySettlementInfo);
+
+
+// Lookup Policy Info for a given FileID
+echo "\n\n" . PHP_EOL;
+echo "Looking up Policy Information for a given FileID" . PHP_EOL;
+$myPolicyInfo = $client->getPolicyInfo($myClientId,$myConnectorId,'438364');
+echo "Policy Info retrieved.\n" . PHP_EOL;
+echo "Printing info about the Policies Issued for this file: \n" . PHP_EOL;
+$client->printPolicyInfo($myPolicyInfo);
 
 

@@ -1092,6 +1092,84 @@ class Client
         }
     }
 
-    
+
+    /**
+     * Retrieves policy information for a specific file using the /policies/:client_id/:client_connector_id/:file_id endpoint.
+     *
+     * @param string $clientId The client ID to use in the endpoint.
+     * @param string $connectorId The connector ID to use in the endpoint.
+     * @param string $fileId The file ID to use in the endpoint.
+     * @return array Returns the settlement information, or throws an exception on failure.
+     * @throws \Exception
+     */    
+    public function getPolicyInfo(string $clientId, string $connectorId, string $fileId): array
+    {
+        $endpoint = "/policies/$clientId/$connectorId/$fileId";
+
+        $response = $this->getData($endpoint);
+
+        if ($response['success'] === true && $response['status_code'] === 200) {
+            return $response['data'];
+        }
+
+        if (isset($response['data'][0])) {
+            $error = $response['data'][0];
+            throw new \Exception("Error Code: {$error['code']} - {$error['name']}. Error: {$error['message']}. Resolution: {$error['resolution']}");
+        }
+
+        throw new \Exception('Failed to retrieve policy information.');
+    }
+
+
+     /**
+     * Prints the policy information returned by the getPolicyInfo method.
+     *
+     * @param array $policyData The settlement data array returned from the API.
+     */   
+    public function printPolicyInfo(array $policyData): void
+    {
+        foreach ($policyData as $policy) {
+            echo "File ID: " . ($policy['file_id'] ?? 'N/A') . PHP_EOL;
+            echo "File Number: " . ($policy['file_number'] ?? 'N/A') . PHP_EOL;
+            echo "Files URL: " . ($policy['files_url'] ?? 'N/A') . PHP_EOL;
+            echo "Recordings URL: " . ($policy['recordings_url'] ?? 'N/A') . PHP_EOL;
+            echo "Disbursements URL: " . ($policy['disbursements_url'] ?? 'N/A') . PHP_EOL;
+
+            if (isset($policy['policies'])) {
+                foreach ($policy['policies'] as $policyType => $policies) {
+                    echo "Policy Type: " . $policyType . PHP_EOL;
+                    foreach ($policies as $policyDetails) {
+                        echo "  Policy ID: " . ($policyDetails['policy_id'] ?? 'N/A') . PHP_EOL;
+                        echo "  Policy Number: " . ($policyDetails['policy_number'] ?? 'N/A') . PHP_EOL;
+                        echo "  Issue Date: " . ($policyDetails['issue_date'] ?? 'N/A') . PHP_EOL;
+                        echo "  Effective Date: " . ($policyDetails['effective_date'] ?? 'N/A') . PHP_EOL;
+
+                        if (isset($policyDetails['underwriter_info'])) {
+                            echo "  Underwriter Information:" . PHP_EOL;
+                            echo "    Underwriter ID: " . ($policyDetails['underwriter_info']['underwriter_id'] ?? 'N/A') . PHP_EOL;
+                            echo "    Underwriter Name: " . ($policyDetails['underwriter_info']['underwriter_name'] ?? 'N/A') . PHP_EOL;
+                            echo "    Phone: " . ($policyDetails['underwriter_info']['phone'] ?? 'N/A') . PHP_EOL;
+                            echo "    Email: " . ($policyDetails['underwriter_info']['email'] ?? 'N/A') . PHP_EOL;
+                            echo "    Address: " . ($policyDetails['underwriter_info']['address'] ?? 'N/A') . PHP_EOL;
+                            echo "    File Partners URL: " . ($policyDetails['underwriter_info']['file_partners_url'] ?? 'N/A') . PHP_EOL;
+                        }
+
+                        if (isset($policyDetails['property_info'])) {
+                            echo "  Property Information:" . PHP_EOL;
+                            echo "    Property ID: " . ($policyDetails['property_info']['property_id'] ?? 'N/A') . PHP_EOL;
+                            echo "    Property Type: " . ($policyDetails['property_info']['property_type'] ?? 'N/A') . PHP_EOL;
+                            echo "    Street Address: " . ($policyDetails['property_info']['street_address'] ?? 'N/A') . PHP_EOL;
+                            echo "    County: " . ($policyDetails['property_info']['county'] ?? 'N/A') . PHP_EOL;
+                            echo "    Properties URL: " . ($policyDetails['property_info']['properties_url'] ?? 'N/A') . PHP_EOL;
+                        }
+
+                        echo "----------------------------------------\n" . PHP_EOL;
+                    }
+                }
+            }
+        }
+    }
+
+
   
 }
