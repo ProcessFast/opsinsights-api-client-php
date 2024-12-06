@@ -43,24 +43,24 @@ $client->printMyKeyInfoAndAvailableConnectors();
 
 
 // Lookup a File by a given address
-$myExampleFile = $client->fileLookupByAddress('123 Main Street, Columbia, SC  29212',$myClientId,$myConnectorId);
+// $myExampleFile = $client->fileLookupByAddress('123 Main Street, Columbia, SC  29212',$myClientId,$myConnectorId);
 
-if ($myExampleFile) {
-    echo "Example File(s) Information Returned by Address Lookup:\n\n" . PHP_EOL;
-    $client->printAddressesFromLookup($myExampleFile);
-} else {
-    echo "Failed to retrieve file information.";
-}
+// if ($myExampleFile) {
+//     echo "Example File(s) Information Returned by Address Lookup:\n\n" . PHP_EOL;
+//     $client->printAddressesFromLookup($myExampleFile);
+// } else {
+//     echo "Failed to retrieve file information.";
+// }
 
 
 
 // Now lookup a file by a returned FileID (example FileID=492524)
-echo "\n\n" . PHP_EOL;
-echo "Looking up File Information based on a FileID (ex. 492524)\n" . PHP_EOL;
-$myFile = $client->fileLookupByFileId($myClientId,$myConnectorId,'492524');
-echo "File info retrieved.\n" . PHP_EOL;
-echo "Printing out File Info for File Looked Up by FileID: \n" . PHP_EOL;
-$client->printFileInfo($myFile);
+// echo "\n\n" . PHP_EOL;
+// echo "Looking up File Information based on a FileID (ex. 492524)\n" . PHP_EOL;
+// $myFile = $client->fileLookupByFileId($myClientId,$myConnectorId,'492524');
+// echo "File info retrieved.\n" . PHP_EOL;
+// echo "Printing out File Info for File Looked Up by FileID: \n" . PHP_EOL;
+// $client->printFileInfo($myFile);
 
 
 // Now lookup a file by a Lender Loan Number (example Lender File # 265410444)
@@ -84,7 +84,7 @@ $client->printFileInfo($myFile);
 // Now lookup all information on a given Buyer
 // echo "\n\n" . PHP_EOL;
 // echo "Looking up information for a given Buyer" . PHP_EOL;
-// $myBuyerInfo = $client->getBuyersInfo($myClientId,$myConnectorId,'145656');
+// $myBuyerInfo = $client->getBuyersInfo($myClientId,$myConnectorId,'405605');
 // echo "Buyer Info retrieved.\n" . PHP_EOL;
 // echo "Printing info about the given Buyer(s) that is in the system: \n" . PHP_EOL;
 // $client->printBuyersInfo($myBuyerInfo);
@@ -93,7 +93,7 @@ $client->printFileInfo($myFile);
 // Now lookup all information for a Disbursement of a file
 // echo "\n\n" . PHP_EOL;
 // echo "Looking up Disbursement information for a given file" . PHP_EOL;
-// $myDisbursementInfo = $client->getDisbursementInfo($myClientId,$myConnectorId,'61630');
+// $myDisbursementInfo = $client->getDisbursementInfo($myClientId,$myConnectorId,'854922');
 // echo "Disbursement Info retrieved.\n" . PHP_EOL;
 // echo "Printing info about the Disbursements for this file that are in the system: \n" . PHP_EOL;
 // $client->printDisbursementInfo($myDisbursementInfo);
@@ -120,7 +120,7 @@ $client->printFileInfo($myFile);
 // Now lookup all information on a given Seller
 // echo "\n\n" . PHP_EOL;
 // echo "Looking up information for a given Seller" . PHP_EOL;
-// $mySellerInfo = $client->getSellerInfo($myClientId,$myConnectorId,'845814');
+// $mySellerInfo = $client->getSellerInfo($myClientId,$myConnectorId,'1600483');
 // echo "Seller Info retrieved.\n" . PHP_EOL;
 // echo "Printing info about the given Seller(s) that is in the system: \n" . PHP_EOL;
 // $client->printSellerInfo($mySellerInfo);
@@ -145,11 +145,28 @@ $client->printFileInfo($myFile);
 
 
 // Lookup Policy Info for a given FileID
-echo "\n\n" . PHP_EOL;
-echo "Looking up Policy Information for a given FileID" . PHP_EOL;
-$myPolicyInfo = $client->getPolicyInfo($myClientId,$myConnectorId,'438364');
-echo "Policy Info retrieved.\n" . PHP_EOL;
-echo "Printing info about the Policies Issued for this file: \n" . PHP_EOL;
-$client->printPolicyInfo($myPolicyInfo);
+// echo "\n\n" . PHP_EOL;
+// echo "Looking up Policy Information for a given FileID" . PHP_EOL;
+// $myPolicyInfo = $client->getPolicyInfo($myClientId,$myConnectorId,'438364');
+// echo "Policy Info retrieved.\n" . PHP_EOL;
+// echo "Printing info about the Policies Issued for this file: \n" . PHP_EOL;
+// $client->printPolicyInfo($myPolicyInfo);
 
+
+// Demonstrating Custom Endpoint - Looking up a Referral Agent's ID and info from RamQuest
+echo "\n\n" . PHP_EOL;
+echo "Looking up Referral Agent records in the system that match 'Joseph Martin'." . PHP_EOL;
+$myCustomReferralAgentLookupData = $client->customLookupReferralAgent($myClientId,$myConnectorId,'Joseph Martin');
+echo "Matching Referral Agent records retrieved.\n" . PHP_EOL;
+echo "Printing records received that are a match for that Referral Agent returned by the system: \n" . PHP_EOL;
+$client->printCustomLookupReferralAgent($myCustomReferralAgentLookupData);
+
+
+// Demonstrating Custom Endpoint - Looking up a Referral Agent's Sales Volume and other summary sales information using the Referral Agent's ID
+echo "\n\n" . PHP_EOL;
+echo "Looking up the Sales Volume and other Summary Sales Info for a given Referral Agent ID - 403396221" . PHP_EOL;
+$myCustomReferralAgentSalesVolumeData = $client->customGetReferralAgentSalesVolume($myClientId,$myConnectorId,'403396221');
+echo "Sales Volume Data Retieved!.\n" . PHP_EOL;
+echo "Printing info about the Sales Volume for this Referral Agent: \n" . PHP_EOL;
+$client->printCustomGetReferralAgentSalesVolume($myCustomReferralAgentSalesVolumeData);
 

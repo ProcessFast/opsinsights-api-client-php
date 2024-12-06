@@ -1171,5 +1171,125 @@ class Client
     }
 
 
-  
+    /**
+     * Client Specific Custom Endpoint Example that looks up a Referral Partner's information when passed a name /custom/shaddock/:client_id/:connector_id/lookup-referral-agent/:referral_agent_name endpoint.
+     *
+     * @param string $clientId The client ID to use in the endpoint.
+     * @param string $connectorId The connector ID to use in the endpoint.
+     * @param string $referralAgentName The name of the referral agent to lookup - will automatically replace spaces with underscores.
+     * @return array Returns the agent's unique ID, name and other applicable information.
+     * @throws \Exception
+     */
+    public function customLookupReferralAgent(string $clientId, string $connectorId, string $referralAgentName): array
+    {
+        $formattedAgentName = str_replace(' ', '_', $referralAgentName);
+        $endpoint = "/custom/shaddock/$clientId/$connectorId/lookup-referral-agent/$formattedAgentName";
+
+        $response = $this->getData($endpoint);
+
+        if ($response['success'] === true && $response['status_code'] === 200) {
+            return $response['data'];
+        }
+
+        if (isset($response['data'][0])) {
+            $error = $response['data'][0];
+            throw new \Exception("Error Code: {$error['code']} - {$error['name']}. Error: {$error['message']}. Resolution: {$error['resolution']}");
+        }
+
+        throw new \Exception('Failed to retrieve referral agent information.');
+    }
+
+
+    /**
+     * Prints the referral agent information returned by the customLookupReferralAgent method.
+     *
+     * @param array $referralAgentData The referral agent data array returned from the API.
+     */
+    public function printCustomLookupReferralAgent(array $referralAgentData): void
+    {
+        foreach ($referralAgentData as $data) {
+            // Print the Referral Agent Sales Volume URL
+            echo "Referral Agent Sales Volume URL: " . ($data['referral-agent-sales-volume'] ?? 'N/A') . PHP_EOL;
+
+            // Check if agent_info key exists and print the details of each agent
+            if (isset($data['agent_info'])) {
+                echo "Referral Agents Information:" . PHP_EOL;
+
+                foreach ($data['agent_info'] as $agent) {
+                    echo "Agent ID: " . ($agent['agent_id'] ?? 'N/A') . PHP_EOL;
+                    echo "Agent Name: " . ($agent['agent_name'] ?? 'N/A') . PHP_EOL;
+                    echo "Agent Contact: " . ($agent['agent_contact'] ?? 'N/A') . PHP_EOL;
+                    echo "Total Orders in the Past Year: " . ($agent['total_orders_in_the_past_year'] ?? 'N/A') . PHP_EOL;
+                    echo "Last Order Date in the Past Year: " . ($agent['last_order_date_in_the_past_year'] ?? 'N/A') . PHP_EOL;
+                    echo "----------------------------------------\n" . PHP_EOL;
+                }
+            } else {
+                echo "No Referral Agents Information Found." . PHP_EOL;
+            }
+
+            echo "========================================\n" . PHP_EOL;
+        }
+    }
+
+
+    /**
+     * Client Specific Custom Endpoint Example that returns a Referral Agent's Sales Volume and other Sale Info when passing the Referral Agent ID
+     *  /custom/shaddock/:client_id/:client_connector_id/referral-agent-sales-volume/:referral_agent_id endpoint.
+     *
+     * @param string  $clientId The client ID to use in the endpoint.
+     * @param string  $connectorId The connector ID to use in the endpoint.
+     * @param integer $referralAgentId The unique ID of the referral agent that you want to return sales volume information on.
+     * @return array  Returns the agent's unique ID, name and other applicable information.
+     * @throws \Exception
+     */
+    public function customGetReferralAgentSalesVolume(string $clientId, string $connectorId, string $referralAgentId): array
+    {
+        $endpoint = "/custom/shaddock/$clientId/$connectorId/referral-agent-sales-volume/$referralAgentId";
+
+        $response = $this->getData($endpoint);
+
+        if ($response['success'] === true && $response['status_code'] === 200) {
+            return $response['data'];
+        }
+
+        if (isset($response['data'][0])) {
+            $error = $response['data'][0];
+            throw new \Exception("Error Code: {$error['code']} - {$error['name']}. Error: {$error['message']}. Resolution: {$error['resolution']}");
+        }
+
+        throw new \Exception('Failed to retrieve referral agent sales volume information.');
+    }
+
+
+    /**
+     * Prints the referral agent sales volume information returned by the customGetReferralAgentSalesVolume method.
+     *
+     * @param array $referralAgentSalesData The referral agent data array returned from the API.
+     */
+    public function printCustomGetReferralAgentSalesVolume(array $salesVolumeData): void
+    {
+        foreach ($salesVolumeData as $agentData) {
+            echo "Referral Agent ID: " . ($agentData['referral_agent_id'] ?? 'N/A') . PHP_EOL;
+            echo "Referral Agent Name: " . ($agentData['referral_agent_name'] ?? 'N/A') . PHP_EOL;
+            echo "Referral Agent Contact: " . ($agentData['referral_agent_contact'] ?? 'N/A') . PHP_EOL;
+            echo "Lifetime Orders: " . ($agentData['lifetime_orders'] ?? 'N/A') . PHP_EOL;
+            echo "Lifetime Closed Orders: " . ($agentData['lifetime_closed_orders'] ?? 'N/A') . PHP_EOL;
+            echo "Lifetime Closed Sales Volume: " . ($agentData['lifetime_closed_sales_volume'] ?? 'N/A') . PHP_EOL;
+            echo "New Orders Current Year: " . ($agentData['new_orders_current_year'] ?? 'N/A') . PHP_EOL;
+            echo "Closed Orders Current Year: " . ($agentData['closed_orders_current_year'] ?? 'N/A') . PHP_EOL;
+            echo "Sales Volume Current Year: " . ($agentData['sales_volume_current_year'] ?? 'N/A') . PHP_EOL;
+            echo "New Orders Current Month: " . ($agentData['new_orders_current_month'] ?? 'N/A') . PHP_EOL;
+            echo "Closed Orders Current Month: " . ($agentData['closed_orders_current_month'] ?? 'N/A') . PHP_EOL;
+            echo "Sales Volume Current Month: " . ($agentData['sales_volume_current_month'] ?? 'N/A') . PHP_EOL;
+            echo "New Orders Last 30 Days: " . ($agentData['new_orders_last_30_days'] ?? 'N/A') . PHP_EOL;
+            echo "Closed Orders Last 30 Days: " . ($agentData['closed_orders_last_30_days'] ?? 'N/A') . PHP_EOL;
+            echo "Sales Volume Last 30 Days: " . ($agentData['sales_volume_last_30_days'] ?? 'N/A') . PHP_EOL;
+
+            echo "----------------------------------------\n" . PHP_EOL;
+        }
+    }
+
+
+
+
 }
